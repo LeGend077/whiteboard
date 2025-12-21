@@ -1,0 +1,43 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+#maincanvas {
+    background-color: white;
+    display: block;
+}
+
+#tools {
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    background-color: whitesmoke;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.3)
+}
+
+.toolbtn {
+    margin: 2px;
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    background: white;
+    border: 2px aliceblue solid;
+    border-radius: 10px;
+}
+
+.isactive {
+    background-color: rgb(220, 220, 220);
+    border: 2px rgb(120, 120, 120) solid;
+}
+
+.toolbtn:hover {
+    background-color: rgb(220, 220, 220);
+    border: 2px rgb(120, 120, 120) solid;
+}
