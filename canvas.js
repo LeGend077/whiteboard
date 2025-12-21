@@ -61,7 +61,8 @@ window.addEventListener("keydown", (e) => {
 
 // Stroke data
 let currentTool = "brush";
-let ERASER_RADIUS = 20;
+let toolSize = 20;
+let color = "black"
 
 const strokes = [];
 const undoStack = [];
@@ -70,8 +71,8 @@ let currentStroke = null;
 
 function startStroke() {
     currentStroke = {
-        color: "black",
-        size: 10,
+        color: color,
+        size: toolSize,
         points: [{ x: Input.x, y: Input.y }]
     };
     strokes.push(currentStroke);
@@ -94,7 +95,7 @@ function eraseAt(x, y) {
             const dy = p.y - y;
             const dist = Math.hypot(dx, dy);
 
-            if (dist < ERASER_RADIUS) {
+            if (dist < toolSize) {
                 strokes.splice(i, 1); // remove entire stroke
                 return;
             }
@@ -179,7 +180,7 @@ function render() {
 
     if (currentTool === "eraser") {
         ctx.beginPath();
-        ctx.arc(Input.x, Input.y, ERASER_RADIUS, 0, Math.PI * 2);
+        ctx.arc(Input.x, Input.y, toolSize, 0, Math.PI * 2);
         ctx.strokeStyle = "rgba(0,0,0,0.3)";
         ctx.lineWidth = 1;
         ctx.stroke();
