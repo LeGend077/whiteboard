@@ -54,11 +54,6 @@ canvas.addEventListener("pointerleave", () => {
     endStroke();
 });
 
-window.addEventListener("keydown", (e) => {
-  if (e.ctrlKey && e.key === "z") undo();
-  if (e.ctrlKey && e.key === "y") redo();
-});
-
 // Stroke data
 let currentTool = "brush";
 let toolSize = 20;
@@ -97,6 +92,7 @@ function eraseAt(x, y) {
 
             if (dist < toolSize) {
                 strokes.splice(i, 1); // remove entire stroke
+                undoStack.splice(i, 1); // Incomplete (workaround)
                 return;
             }
         }
@@ -104,23 +100,23 @@ function eraseAt(x, y) {
 }
 
 function undo() {
-  if (undoStack.length === 0) return;
-  const stroke = undoStack.pop();
-  redoStack.push(stroke);
+    if (undoStack.length === 0) return;
+    const stroke = undoStack.pop();
+    redoStack.push(stroke);
 
-  // rebuild strokes array from undoStack
-  strokes.length = 0;
-  strokes.push(...undoStack);
+    // rebuild strokes array from undoStack
+    strokes.length = 0;
+    strokes.push(...undoStack);
 }
 
 function redo() {
-  if (redoStack.length === 0) return;
-  const stroke = redoStack.pop();
-  undoStack.push(stroke);
+    if (redoStack.length === 0) return;
+    const stroke = redoStack.pop();
+    undoStack.push(stroke);
 
-  // rebuild strokes array
-  strokes.length = 0;
-  strokes.push(...undoStack);
+    // rebuild strokes array
+    strokes.length = 0;
+    strokes.push(...undoStack);
 }
 
 
