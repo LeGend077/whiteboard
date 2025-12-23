@@ -23,7 +23,11 @@ const Input = {
     y: 0,
     prevX: 0,
     prevY: 0,
-    isDown: false
+    isDown: false,
+    shapeX: 0,
+    shapeY: 0,
+    prevShapeX: 0,
+    prevShapeY: 0,
 };
 
 function updatePointerPos(e) {
@@ -36,6 +40,12 @@ function updatePointerPos(e) {
 
 canvas.addEventListener("pointerdown", e => {
     Input.isDown = true;
+
+    // for shapes
+    Input.prevShapeX = e.offsetX;
+    Input.prevShapeY = e.offsetY;
+
+    // for brush
     updatePointerPos(e);
     startStroke();
 });
@@ -44,9 +54,18 @@ canvas.addEventListener("pointermove", e => {
     updatePointerPos(e);
 });
 
-canvas.addEventListener("pointerup", () => {
+canvas.addEventListener("pointerup", (e) => {
     Input.isDown = false;
+
+    // for shapes
+    Input.shapeX = e.offsetX;
+    Input.shapeY = e.offsetY;
+
+    updateShapes();
+
+    // for brush
     endStroke();
+    // console.log(Input);
 });
 
 canvas.addEventListener("pointerleave", () => {
@@ -63,6 +82,18 @@ const strokes = [];
 const undoStack = [];
 const redoStack = [];
 let currentStroke = null;
+
+const shapes = [];
+const shapeTools = ['circle', 'square', 'hollowCircle', 'hollowSquare']
+
+function updateShapes() {
+    if (!shapeTools.includes(currentTool)) return;
+    shapes.push({
+        type: currentTool,
+        color: color,
+        points: [Input.prevShapeX, Input.prevShapeY, Input.shapeX, Input.shapeY]
+    })
+}
 
 function startStroke() {
     currentStroke = {
@@ -172,6 +203,20 @@ function render() {
         }
 
         ctx.stroke();
+    }
+
+    for (const shape of shapes) {
+        if (shape.type === "circle") {
+            ctx.beginPath();
+
+            let radius = Math.min(Math.abs(shape.points[0] - shape.points[2]), Math.abs(shape.points[1] - shape.points[3])) / 2;
+
+            ctx.arc((shape.points[0] + shape.points[2]) / 2, (shape.points[1] + shape.points[3]) / 2, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = shape.color;
+            ctx.fill();
+            ctx.strokeStyle = shape.color;
+            ctx.stroke();
+        }
     }
 
     if (currentTool === "eraser") {

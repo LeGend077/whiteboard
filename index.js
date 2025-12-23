@@ -1,5 +1,6 @@
 let brushbtn = document.getElementById('brush');
 let eraserbtn = document.getElementById('eraser');
+let circlebtn = document.getElementById('circle');
 let size = document.getElementById('sizeSlider');
 let colorPicker = document.getElementById('colorPicker');
 
@@ -7,12 +8,21 @@ brushbtn.addEventListener("click", (e) => {
     currentTool = "brush";
     brushbtn.classList.add('isactive');
     eraserbtn.classList.remove('isactive');
+    circlebtn.classList.remove('isactive');
 });
 
 eraserbtn.addEventListener("click", (e) => {
     currentTool = "eraser";
-    brushbtn.classList.remove('isactive');
     eraserbtn.classList.add('isactive');
+    brushbtn.classList.remove('isactive');
+    circlebtn.classList.remove('isactive');
+});
+
+circlebtn.addEventListener("click", (e) => {
+    currentTool = "circle";
+    circlebtn.classList.add('isactive')
+    brushbtn.classList.remove('isactive');
+    eraserbtn.classList.remove('isactive');
 });
 
 size.addEventListener("change", (e) => {
